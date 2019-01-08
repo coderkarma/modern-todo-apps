@@ -1,3 +1,5 @@
+'use strict'
+
 let notes = getSavedNotes()
 
 const filters = {
@@ -29,14 +31,13 @@ document.querySelector("#search-text").addEventListener('input', (e) => {
 });
 
 document.querySelector('#filter-by').addEventListener('change', (e) => {
-   filters.sortBy = e.target.value;
-   renderNotes(notes, filters);
+    filters.sortBy = e.target.value;
+    renderNotes(notes, filters);
 });
 
-window.addEventListener('storage', () => {
-    if( e.key === 'notes'){
+window.addEventListener('storage', (e) => {
+    if (e.key === 'notes') {
         notes = JSON.parse(e.newValue);
         renderNotes(notes, filters);
     }
 });
-
