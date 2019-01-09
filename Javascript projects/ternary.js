@@ -1,6 +1,3 @@
-// const myAge = 7
-// let message = myAge >= 18 ? "YOU CAN VOTE" : "YOU CANNOT VOTE";
-// console.log(message);
 
 const myAge = 27
 const showPage = () => {
