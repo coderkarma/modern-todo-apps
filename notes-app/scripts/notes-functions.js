@@ -26,18 +26,10 @@ const removeNote = id => {
 
 // Generate the DOM structure for a note
 const generateNoteDOM = (note) => {
-    const noteEl = document.createElement('div');
-    const textEle = document.createElement('a');
-    const button = document.createElement('button');
+    const noteEl = document.createElement('a');
+    const textEle = document.createElement('p');
+    const statusEle = document.createElement('p');
 
-    //Setup the note title text
-    button.textContent = 'x';
-    noteEl.appendChild(button);
-    button.addEventListener('click', () => {
-        removeNote(note.id);
-        savedNotes(notes)
-        renderNotes(notes, filters);
-    });
 
     // Setup the note title text
     if (note.title.length > 0) {
@@ -45,8 +37,17 @@ const generateNoteDOM = (note) => {
     } else {
         textEle.textContent = "Unamed note";
     }
-    textEle.setAttribute('href', `edit.html#${note.id}`)
+    textEle.classList.add('list-item__title')
     noteEl.appendChild(textEle);
+
+    //setup the link
+    noteEl.setAttribute('href', `edit.html#${note.id}`)
+    noteEl.classList.add('list-item')
+
+    // set up the status message
+    statusEle.textContent = generateLastEdited(note.updateAt);
+    statusEle.classList.add('list-item__subtitle')
+    noteEl.appendChild(statusEle);
 
     return noteEl;
 }
@@ -89,14 +90,23 @@ const sortNotes = (notes, sortBy) => {
 
 // Render application notes
 const renderNotes = (notes, filters) => {
+    const notesEle =   document.querySelector("#notes");
     notes = sortNotes(notes, filters.sortBy);
     const filteredNotes = notes.filter(note => note.title.toLowerCase().includes(filters.searchText.toLowerCase()))
-    document.querySelector("#notes").innerHTML = "";
 
-    filteredNotes.forEach((note) => {
-        const noteEl = generateNoteDOM(note);
-        document.querySelector('#notes').appendChild(noteEl);
-    })
+    notesEle.innerHTML = "";
+
+    if (notes.length > 0) {
+        filteredNotes.forEach((note) => {
+            const noteEl = generateNoteDOM(note);
+            notesEle.appendChild(noteEl);
+        })
+    } else {
+        const emptyMessage = document.createElement('p');
+        emptyMessage.classList.add('empty-message')
+        emptyMessage.textContent = "No notes to show";
+        notesEle.appendChild(emptyMessage);
+    }
 }
 
 // Generate the last edited message
