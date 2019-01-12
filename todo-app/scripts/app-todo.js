@@ -15,12 +15,15 @@ document.querySelector("#search-text").addEventListener("input", (e) => {
 })
 
 document.querySelector('#new-todo').addEventListener('submit', (e) => {
-    e.preventDefault();
-    todos.push({
-        id: uuidv4(),
-        text: e.target.elements.text.value,
-        completed: false
-    })
+    const text = e.target.elements.text.value.trim();
+    e.preventDefault()
+    if (text.length > 0) {
+        todos.push({
+            id: uuidv4(),
+            text,
+            completed: false
+        })
+    }
     saveTodos(todos);
     renderTodos(todos, filters);
     e.target.elements.text.value = '';
